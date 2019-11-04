@@ -15,8 +15,7 @@ const ShoppingCart = () => {
 	return (
 		<div className="shopping-cart">
 			{cart.map((item, index)=> (
-				<Item key={item.id} {...item} 
-				index ={index} remove = {removeButton}
+				<Item key={item.id} {...item} index ={index} remove = {removeButton}
 				/>
 			))}
 
