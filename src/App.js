@@ -15,11 +15,19 @@ function App() {
 
 	const addItem = item => {
 		// add the given item to the cart
+		setCart([...cart, item]);
+    	localStorage.setItem('Cart', JSON.stringify([...cart, item]));
 	};
+	const removeButton = index => {
+		let newCart= [...cart];
+		newCart.splice(index, 1);
 
+		setCart(newCart);
+		localStorage.setItem('cart', JSON.stringify(newCart));
+	}
 	return (
 
-		<CartContext.Provider value = {{cart}}>
+		<CartContext.Provider value = {{cart, removeButton}}>
 			<ProductContext.Provider value = {{products,addItem}}>
 			
 			<div className="App">
@@ -34,7 +42,7 @@ function App() {
 
 				<Route
 					path="/cart"
-					component ={ShoppingCart}  />}
+					component ={ShoppingCart}  
 				/>
 			</div>
 			</ProductContext.Provider>
