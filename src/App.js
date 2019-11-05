@@ -6,6 +6,8 @@ import data from './data';
 import Navigation from './components/Navigation';
 import Products from './components/Products';
 import ShoppingCart from './components/ShoppingCart';
+import {ProductContext} from './contexts/ProductContext';
+import {CartContext} from './contexts/CartContext';
 
 function App() {
 	const [products] = useState(data);
@@ -13,29 +15,38 @@ function App() {
 
 	const addItem = item => {
 		// add the given item to the cart
+		setCart([...cart, item]);
+    	localStorage.setItem('Cart', JSON.stringify([...cart, item]));
 	};
+	const removeButton = index => {
+		let newCart= [...cart];
+		newCart.splice(index, 1);
 
+		setCart(newCart);
+		localStorage.setItem('cart', JSON.stringify(newCart));
+	}
 	return (
-		<div className="App">
-			<Navigation cart={cart} />
 
-			{/* Routes */}
-			<Route
-				exact
-				path="/"
-				render={() => (
-					<Products
-						products={products}
-						addItem={addItem}
-					/>
-				)}
-			/>
+		<CartContext.Provider value = {{cart, removeButton}}>
+			<ProductContext.Provider value = {{products,addItem}}>
+			
+			<div className="App">
+				<Navigation cart={cart} />
 
-			<Route
-				path="/cart"
-				render={() => <ShoppingCart cart={cart} />}
-			/>
-		</div>
+				{/* Routes */}
+				<Route
+					exact
+					path="/"
+					component ={Products}
+				/>
+
+				<Route
+					path="/cart"
+					component ={ShoppingCart}  
+				/>
+			</div>
+			</ProductContext.Provider>
+		</CartContext.Provider>
 	);
 }
 
